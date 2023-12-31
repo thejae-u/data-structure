@@ -2,10 +2,11 @@
 #include "List.h"
 #include "Stack.h"
 #include "Queue.h"
+#include "Dictionary.h"
 
 int main()
 {
-    Stack<float> fs1;
+    /*Stack<float> fs1;
     fs1.Push(10.8f);
     fs1.Push(10.2f);
     fs1.Push(10.100f);
@@ -27,5 +28,5 @@ int main()
     sq1.Enqueue("Is");
     sq1.Print();
     sq1.Dequeue();
-    sq1.Print();
+    sq1.Print();*/
 }

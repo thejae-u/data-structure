@@ -8,4 +8,5 @@ add_executable(Project main.cpp
         Stack.h
         Queue.h
         List.h
+        Dictionary.h
 )

@@ -1,19 +1,32 @@
 #ifndef HEADER_List
 #define HEADER_List
+
 #include "Node.h"
 
-template <class T>
+template<class T>
 class List
 {
 public:
     List();
+
     ~List();
+
     void Add(T data);
+
     void AddAt(int idx, T data);
+
     void Remove();
+
     void RemoveAt(int idx);
+
+    int IndexOf(T data);
+
+    T At(int idx);
+
     bool Empty() const;
+
     int Size() const;
+
     void Print() const;
 
 private:
@@ -21,7 +34,7 @@ private:
     int _size;
 };
 
-template <class T>
+template<class T>
 List<T>::List()
 {
     _size = 0;
@@ -29,7 +42,7 @@ List<T>::List()
     _head->next = nullptr;
 }
 
-template <class T>
+template<class T>
 List<T>::~List()
 {
     while (!Empty())
@@ -40,7 +53,7 @@ List<T>::~List()
     delete _head;
 }
 
-template <class T>
+template<class T>
 void List<T>::Add(T data)
 {
     Node<T>* newNode = new Node<T>();
@@ -64,7 +77,7 @@ void List<T>::Add(T data)
     _size++;
 }
 
-template <class T>
+template<class T>
 void List<T>::AddAt(int idx, T data)
 {
     if (idx <= 0 && idx > _size)
@@ -95,7 +108,7 @@ void List<T>::AddAt(int idx, T data)
     _size++;
 }
 
-template <class T>
+template<class T>
 void List<T>::Remove()
 {
     if (_size == 0)
@@ -104,7 +117,7 @@ void List<T>::Remove()
     }
 
 
-    if(_size == 1)
+    if (_size == 1)
     {
         delete _head->next;
         _size--;
@@ -112,7 +125,7 @@ void List<T>::Remove()
     }
 
     Node<T>* curNode = _head->next;
-    while(curNode->next->next != nullptr)
+    while (curNode->next->next != nullptr)
     {
         curNode = curNode->next;
     }
@@ -123,7 +136,7 @@ void List<T>::Remove()
     _size--;
 }
 
-template <class T>
+template<class T>
 void List<T>::RemoveAt(int idx)
 {
     if (idx > _size || idx <= 0)
@@ -143,22 +156,57 @@ void List<T>::RemoveAt(int idx)
     _size--;
 }
 
-template <class T>
+template<class T>
+int List<T>::IndexOf(T data)
+{
+    if(_size == 0)
+    {
+        return -1;
+    }
+
+    int idx = 0;
+    Node<T>* curNode = _head->next;
+    while (curNode->data != data)
+    {
+        idx++;
+        curNode = curNode->next;
+        if (curNode == nullptr)
+        {
+            return -1;
+        }
+    }
+
+    return idx;
+}
+
+template<class T>
+T List<T>::At(int idx)
+{
+    Node<T>* curNode = _head->next;
+    for (int i = 0; i < idx; i++)
+    {
+        curNode = curNode->next;
+    }
+
+    return curNode->data;
+}
+
+template<class T>
 bool List<T>::Empty() const
 {
     return _size == 0;
 }
 
-template <class T>
+template<class T>
 int List<T>::Size() const
 {
     return _size;
 }
 
-template <class T>
+template<class T>
 void List<T>::Print() const
 {
-    if(_size == 0)
+    if (_size == 0)
     {
         return;
     }
@@ -168,8 +216,9 @@ void List<T>::Print() const
     {
         std::cout << curNode->data << " ";
         curNode = curNode->next;
-    }while(curNode);
+    } while (curNode);
 
     std::cout << "\n";
 }
+
 #endif
