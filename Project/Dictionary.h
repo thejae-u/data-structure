@@ -2,6 +2,7 @@
 #define HEADER_DICTIONARY
 
 #include "List.h"
+#include <cassert>
 
 #define EXP_SIZ 5
 
@@ -31,8 +32,30 @@ private:
 
     int _size;
     int _memSize;
+
+    void MemorySet(T2* mem);
 };
 
+template<class T1, class T2>
+void Dictionary<T1, T2>::MemorySet(T2* mem)
+{
+    if (typeid(T2) == typeid(int))
+    {
+        for (int i = 0; i < _memSize; i++)
+        {
+            mem[i] = 0;
+        }
+
+        assert(mem[0] == 0);
+        return;
+    }
+
+    for (int i = 0; i < _memSize; i++)
+    {
+        mem[i] = NULL;
+        assert(mem[0] == NULL);
+    }
+}
 
 template<class T1, class T2>
 Dictionary<T1, T2>::Dictionary()
@@ -41,13 +64,7 @@ Dictionary<T1, T2>::Dictionary()
     _memSize = EXP_SIZ;
     _size = 0;
 
-    if (typeid(T2).name() == typeid(int).name())
-    {
-        memset(_values, 0, EXP_SIZ);
-        return;
-    }
-
-    memset(_values, NULL, EXP_SIZ);
+    MemorySet(_values);
 }
 
 template<class T1, class T2>
@@ -75,13 +92,7 @@ void Dictionary<T1, T2>::Add(T1 key, T2 value)
 
         T2* newMemory = new T2[_memSize];
 
-        if (typeid(T2) == typeid(int))
-        {
-            memset(newMemory, 0, _memSize);
-        } else
-        {
-            memset(newMemory, NULL, _memSize);
-        }
+        MemorySet(newMemory);
 
         for (int i = 0; i < prevSize; i++)
         {
@@ -122,13 +133,7 @@ void Dictionary<T1, T2>::Remove(T1 key)
 
         T2* newMemory = new T2[_memSize];
 
-        if (typeid(T2) == typeid(int))
-        {
-            memset(newMemory, 0, _memSize);
-        } else
-        {
-            memset(newMemory, NULL, _memSize);
-        }
+        MemorySet(newMemory);
 
         for (int i = 0; i < _size; i++)
         {
