@@ -15,9 +15,15 @@ public:
 
     void Add(T1 key, T2 value);
 
+    void Remove(T1 key);
+
     T2 Find(T1 key);
 
-    void Print();
+    int Size() const;
+
+    bool Empty() const;
+
+    void Print() const;
 
 private:
     List<T1> _keys;
@@ -35,7 +41,7 @@ Dictionary<T1, T2>::Dictionary()
     _memSize = EXP_SIZ;
     _size = 0;
 
-    if(typeid(T2).name() == typeid(int).name())
+    if (typeid(T2).name() == typeid(int).name())
     {
         memset(_values, 0, EXP_SIZ);
         return;
@@ -62,25 +68,76 @@ void Dictionary<T1, T2>::Add(T1 key, T2 value)
     _size++;
 
     // Memory Resize
-    if (_size >= _memSize)
+    if (_size == _memSize)
     {
         int prevSize = _memSize;
         _memSize += EXP_SIZ;
 
         T2* newMemory = new T2[_memSize];
-        memset(newMemory, NULL, _memSize);
+
+        if (typeid(T2) == typeid(int))
+        {
+            memset(newMemory, 0, _memSize);
+        } else
+        {
+            memset(newMemory, NULL, _memSize);
+        }
 
         for (int i = 0; i < prevSize; i++)
         {
             newMemory[i] = _values[i];
         }
 
-        delete _values;
+        delete[] _values;
         _values = newMemory;
     }
 
     _keys.Add(key);
-    _values[_keys.IndexOf(key)] = value;
+    _values[_keys.IndexOf(key) - 1] = value;
+}
+
+template<class T1, class T2>
+void Dictionary<T1, T2>::Remove(T1 key)
+{
+    if (_keys.IndexOf(key) == -1)
+    {
+        std::cout << "Invalid Key : Not Exist\n";
+        return;
+    }
+
+    int idx = _keys.IndexOf(key);
+    _keys.RemoveAt(idx);
+    _size--;
+
+    for (int i = idx - 1; i < _size; i++)
+    {
+        _values[i] = _values[i + 1];
+    }
+
+    // Memory Size Check
+    if ((_memSize - _size) > EXP_SIZ)
+    {
+        // Resize Memory
+        _memSize -= EXP_SIZ;
+
+        T2* newMemory = new T2[_memSize];
+
+        if (typeid(T2) == typeid(int))
+        {
+            memset(newMemory, 0, _memSize);
+        } else
+        {
+            memset(newMemory, NULL, _memSize);
+        }
+
+        for (int i = 0; i < _size; i++)
+        {
+            newMemory[i] = _values[i];
+        }
+
+        delete[] _values;
+        _values = newMemory;
+    }
 }
 
 template<class T1, class T2>
@@ -88,19 +145,37 @@ T2 Dictionary<T1, T2>::Find(T1 key)
 {
     if (_keys.IndexOf(key) == -1)
     {
-        std::cout << "Not Exist\n";
+        std::cout << "Invalid Key : Not Exist\n";
         return NULL;
     }
 
-    return _values[_keys.IndexOf(key)];
+    return _values[_keys.IndexOf(key) - 1];
 }
 
 template<class T1, class T2>
-void Dictionary<T1, T2>::Print()
+int Dictionary<T1, T2>::Size() const
 {
+    return _size;
+}
+
+template<class T1, class T2>
+bool Dictionary<T1, T2>::Empty() const
+{
+    return _size == 0;
+}
+
+template<class T1, class T2>
+void Dictionary<T1, T2>::Print() const
+{
+    if (_size == 0)
+    {
+        return;
+    }
+
+    std::cout << "---------------\n";
     for (int i = 0; i < _size; i++)
     {
-        std::cout << _keys.At(i) << " : " << _values[i] << "\n";
+        std::cout << _keys.At(i + 1) << " : " << _values[i] << "\n";
     }
 
     std::cout << "Current Memory Size : " << _memSize << "\n";
