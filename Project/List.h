@@ -8,25 +8,15 @@ class List
 {
 public:
     List();
-
     ~List();
-
     void Add(T data);
-
     void AddAt(int idx, T data);
-
     void Remove();
-
     void RemoveAt(int idx);
-
-    int IndexOf(T data);
-
-    T At(int idx);
-
+    int IndexOf(T data) const;
+    T At(int idx) const;
     bool Empty() const;
-
     int Size() const;
-
     void Print() const;
 
 private:
@@ -157,14 +147,14 @@ void List<T>::RemoveAt(int idx)
 }
 
 template<class T>
-int List<T>::IndexOf(T data)
+int List<T>::IndexOf(T data) const
 {
     if(_size == 0)
     {
         return -1;
     }
 
-    int idx = 0;
+    int idx = 1;
     Node<T>* curNode = _head->next;
     while (curNode->data != data)
     {
@@ -180,10 +170,10 @@ int List<T>::IndexOf(T data)
 }
 
 template<class T>
-T List<T>::At(int idx)
+T List<T>::At(int idx) const
 {
     Node<T>* curNode = _head->next;
-    for (int i = 0; i < idx; i++)
+    for (int i = 1; i < idx; i++)
     {
         curNode = curNode->next;
     }
