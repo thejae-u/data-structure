@@ -1,6 +1,6 @@
 # data-structure
 
-#### List, Stack, Queue
+#### List, Stack, Queue, Dictionary
 
 <hr>
 
